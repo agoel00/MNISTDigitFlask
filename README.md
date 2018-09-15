@@ -1,7 +1,7 @@
 MNIST Digit Recognition Web App
 
 ## Demo
-
+!()[mnist_demo.gif]
 
 ## Introduction
 
