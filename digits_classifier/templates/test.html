@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!--
+        <script src="{{ url_for('static', filename='jquery.min.js')}}"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css')}}" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        -->
+        <!-- Optional theme 
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-theme.min.css')}}" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        -->
+
+        <!-- Latest compiled and minified JavaScript 
+        <script src="{{ url_for('static', filename='bootstrap.min.js')}}" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sketch-js@1.1.3/js/sketch.min.js"></script> 
+        -->
+        <script src="{{ url_for('static', filename='sketch.min.js')     }}"></script>
+  
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.css">
+        <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+    </head>
+    </head>
+
+<body>
+
+    <section class="hero is-primary is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title is-1">
+                    MNIST Digit Classification
+                </h1>
+                <h2 class="subtitle">
+                    Using Random Forest Classifier
+                </h2>
+            </div>
+        </div>
+    </section>
+    <br>
+    <div class="columns">
+        <div class="column">
+
+            <article class="message is-link">
+                <div class="message-header">
+                    <p>Draw Digit</p>
+                    <span class="icon">
+                        <i class="fas fa-pencil-alt"></i>
+                    </span>
+                </div>
+                <div class="message-body has-text-centered">
+                    <canvas id="sketch" style="border: 1px solid black; cursor: crosshair;" width="400" height="400"></canvas>
+                    <br>
+                    <p>Model accuracy: 96.7%</p>
+
+                    <progress class="progress is-warning" value="96.7" max="100">96.7%</progress>
+                    <button class="button is-dark is-focused" id="recognizeBtn">Recognize</button>
+                    <button class="button is-danger" id="clearBtn">Clear</button>
+                </div>
+            </article>
+            <!--
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-header-title is-centered">
+                        <p>Draw Digit</p>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <canvas id="sketch" style="border: 1px solid black; cursor: crosshair;" width="400" height="400"></canvas>
+                    <br>
+                    <br>
+                    <button class="button is-primary" id="recognizeBtn">Recognize</button>
+                    <button class="button is-danger" id="clearBtn">Clear</button>
+                </div>
+            </div>
+        -->
+        </div>
+
+        <div class="column">
+            <article class="message is-link">
+                <div class="message-header">
+                    <p>Prediction</p>
+                    <span class="icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </span>
+                </div>
+                <div class="message-body has-text-centered">
+                    <p id="digit" class="subtitle"></p>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                Built by <strong>Anmol Goel</strong>.
+            </p>
+            <a href="https://github.com/agoel00">Github</a> |
+            <a href="https://anmolgoel.com">Portfolio</a>
+            <p>2018</p>
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+      $(function() {
+        var sketch = $('#sketch').sketch();
+      });
+
+      $('#recognizeBtn').on('click', function (e) {
+        var canvas = document.getElementById('sketch');
+        $.ajax({
+          type: "POST",
+          url: '/recognizer',
+          data: JSON.stringify({'image':canvas.toDataURL()}),
+          contentType: "application/json; charset=utf-8",
+        }).done(function(data) {
+            console.log(data);
+            var text = $('#digit').text();
+            $('#digit').text('I think you drew: '+data)
+        });
+
+       });
+
+      $('#clearBtn').on('click', function (e) {
+        var canvas = document.getElementById('sketch');
+        var context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        $('#sketch').sketch('actions',[]);
+        $('#digit').text('');
+
+       });
+
+    </script>
+
+  </div>
+
+
+
+</body>
