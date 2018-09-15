@@ -1,4 +1,4 @@
-MNIST Digit Recognition Web App
+# MNIST Digit Recognition Web App
 
 ## Demo
 ![](mnist_demo.gif)
