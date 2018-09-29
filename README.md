@@ -34,3 +34,4 @@ Train and save the model using the Jupiter notebook and then
 And run the flask app
 >python srv.py
 
+## Deployment
